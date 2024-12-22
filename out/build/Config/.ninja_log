@@ -1,3 +1,15 @@
 # ninja log v6
-7	491	7564378519810346	CMakeFiles/InjectionGalore.dir/src/main.c.obj	457bb94abf94479f
-498	641	7564378524719271	InjectionGalore.exe	7bb7dc73c2a17978
+8	552	7565695428406451	CMakeFiles/InjectionGalore.dir/src/main.c.obj	8f035f8b78d056ff
+458	597	7565280843790056	InjectionGalore.exe	7bb7dc73c2a17978
+6	472	7565697764736854	CMakeFiles/InjectionGalore.dir/enumeration/enumeration.c.obj	a48b046b16e7ec9a
+472	613	7565697769397583	InjectionGalore.exe	bccc2e76b8504a9
+8	576	7565699817380091	CMakeFiles/InjectionGalore.dir/enumeration/enumeration.c.obj	a48b046b16e7ec9a
+577	725	7565699823078871	InjectionGalore.exe	bccc2e76b8504a9
+8	470	7565699959716184	CMakeFiles/InjectionGalore.dir/enumeration/enumeration.c.obj	a48b046b16e7ec9a
+471	607	7565699964342658	InjectionGalore.exe	bccc2e76b8504a9
+8	508	7565700373327331	CMakeFiles/InjectionGalore.dir/enumeration/enumeration.c.obj	a48b046b16e7ec9a
+509	658	7565700378334446	InjectionGalore.exe	bccc2e76b8504a9
+8	538	7565753038705374	CMakeFiles/InjectionGalore.dir/src/main.c.obj	8f035f8b78d056ff
+539	695	7565753044017086	InjectionGalore.exe	bccc2e76b8504a9
+7	532	7565753396794297	CMakeFiles/InjectionGalore.dir/src/main.c.obj	8f035f8b78d056ff
+533	675	7565753402046030	InjectionGalore.exe	bccc2e76b8504a9
