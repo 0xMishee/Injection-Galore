@@ -48,10 +48,17 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    if (!enumerateAll(hNTDLLMoudle, hKernel32Module)) {
+        handleError(ERROR_INVALID_ENUMERATION, "Failed to enumerate all");
+        goto Cleanup;
+        return 1;
+    }
+
     
     Cleanup:
     if (hNTDLLMoudle) {FreeLibrary(hNTDLLMoudle);}
     if (hKernel32Module) {FreeLibrary(hKernel32Module);}
+
 
 
     return 0;

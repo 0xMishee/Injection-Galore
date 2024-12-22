@@ -21,10 +21,12 @@ typedef enum {
     ERROR_INVALID_HASHTABLE,
     ERROR_INVALID_INFO,
     ERROR_UNKNOWN,
-    ERROR_FUNCTION_NOT_FOUND
+    ERROR_FUNCTION_NOT_FOUND, 
+    ERROR_FAILED_TO_GET_PROCESS_ADDRESS,
+    ERROR_FAILED_TO_ALLOCATE_MEMORY
 } errorCode;
 
-const char *getErrorMessage(errorCode code){
+static const char* getErrorMessage(errorCode code){
     switch (code)
     {
         case ERROR_NONE: return "No error";
@@ -44,11 +46,13 @@ const char *getErrorMessage(errorCode code){
         case ERROR_INVALID_INFO: return "Invalid info";
         case ERROR_UNKNOWN: return "Unknown error";
         case ERROR_FUNCTION_NOT_FOUND: return "Function not found";
+        case ERROR_FAILED_TO_GET_PROCESS_ADDRESS: return "Failed to get process address";
+        case ERROR_FAILED_TO_ALLOCATE_MEMORY: return "Failed to allocate memory";
         default: return "Unknown error";
     }
 }
 
-void handleError(errorCode code, const char *message){
+static void handleError(errorCode code, const char* message){
     fprintf(stderr, "[!] %s: %s\n", getErrorMessage(code), message);
     if (code != ERROR_NONE){
         exit(EXIT_FAILURE);
