@@ -11,6 +11,8 @@
 
 /*
 The idea of this program is to be able to choose injection methods to test with various payloads. 
+The payloads will be encrypted using different encryption methods.
+The program will also enumerate the system to gather information about the OS, processes, services, and registry keys.
 */
 
 typedef struct {
@@ -19,8 +21,6 @@ typedef struct {
     char *encryption;
     char *enumeration;
 } config, *pConfig;
-
-
 
 int main(int argc, char *argv[]) {
     
@@ -53,13 +53,9 @@ int main(int argc, char *argv[]) {
         goto Cleanup;
         return 1;
     }
-
     
     Cleanup:
-    if (hNTDLLMoudle) {FreeLibrary(hNTDLLMoudle);}
-    if (hKernel32Module) {FreeLibrary(hKernel32Module);}
-
-
-
-    return 0;
+        if (hNTDLLMoudle) {FreeLibrary(hNTDLLMoudle);}
+        if (hKernel32Module) {FreeLibrary(hKernel32Module);}
+        return 0;
 }

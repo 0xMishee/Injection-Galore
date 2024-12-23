@@ -23,6 +23,8 @@ BOOL enumerateAll(HMODULE hNTDLLModule, HMODULE hKernel32Module) {
 
     if (!enumerateServices()) {return FALSE;}
 
+    if (!enumerateRegistry()) {return FALSE;}
+
     printf("Done enumerating all\n");
     return TRUE;
 }
@@ -108,7 +110,7 @@ static BOOL enumerateServices() {
                         hSCManager,
                         SC_ENUM_PROCESS_INFO,
                         SERVICE_WIN32,
-                        SERVICE_STATE_ALL,
+                        SERVICE_STATE_ALL, // Active | Inactive <.<
                         NULL,
                         0,
                         &dwBytesNeeded,
@@ -154,7 +156,27 @@ static BOOL enumerateServices() {
 }
 
 static BOOL enumerateRegistry() {
-    return TRUE;
+
+    DWORD dwKeysFound = 0;
+
+    registryInfo *registryKeys = (registryInfo*)malloc(sizeof(registryInfo));
+    if (!registryKeys) {
+        handleError(ERROR_FAILED_TO_ALLOCATE_MEMORY, "Failed to allocate memory for registry keys");
+        goto Cleanup;
+    }
+
+    for (size_t i = 0; i < sizeof(antiAnalysisRegistryKeys) / sizeof(antiAnalysisRegistryKeys[0]); i++) {
+        HKEY hKey;
+        if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, antiAnalysisRegistryKeys[i], 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+            strncpy_s(registryKeys->registryKey, sizeof(registryKeys->registryKey), antiAnalysisRegistryKeys[i], _TRUNCATE);
+            RegCloseKey(hKey);
+            dwKeysFound++;
+        }
+    }
+    Cleanup:
+        free(registryKeys);
+
+    return dwKeysFound > 0 ? TRUE : FALSE;
 }
 
 /**
@@ -181,7 +203,6 @@ static BOOL enumerateOS(HMODULE hNTDLLModule, osInfo *os) {
         os->minorVersion = info.dwMinorVersion;
         os->buildNumber = info.dwBuildNumber;
     }
-
 
     return TRUE;
 }

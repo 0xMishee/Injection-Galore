@@ -23,7 +23,16 @@ typedef enum {
     ERROR_UNKNOWN,
     ERROR_FUNCTION_NOT_FOUND, 
     ERROR_FAILED_TO_GET_PROCESS_ADDRESS,
-    ERROR_FAILED_TO_ALLOCATE_MEMORY
+    ERROR_FAILED_TO_ALLOCATE_MEMORY, 
+    ERROR_FAILED_TO_OPEN_PROCESS,
+    ERROR_FAILED_TO_OPEN_THREAD,
+    ERROR_FAILED_TO_CREATE_PROCESS,
+    ERROR_FAILED_TO_CREATE_THREAD,
+    ERROR_FAILED_TO_GET_MODULE_HANDLE,
+    ERROR_FAILED_TO_GET_PROC_ADDRESS,
+    ERROR_BCRYPT_FAILED,
+    ERROR_AES_INIT_FAILED, 
+    ERROR_AES_INSTALL_FAILED,
 } errorCode;
 
 static const char* getErrorMessage(errorCode code){
@@ -48,6 +57,15 @@ static const char* getErrorMessage(errorCode code){
         case ERROR_FUNCTION_NOT_FOUND: return "Function not found";
         case ERROR_FAILED_TO_GET_PROCESS_ADDRESS: return "Failed to get process address";
         case ERROR_FAILED_TO_ALLOCATE_MEMORY: return "Failed to allocate memory";
+        case ERROR_FAILED_TO_OPEN_PROCESS: return "Failed to open process";
+        case ERROR_FAILED_TO_OPEN_THREAD: return "Failed to open thread";
+        case ERROR_FAILED_TO_CREATE_PROCESS: return "Failed to create process";
+        case ERROR_FAILED_TO_CREATE_THREAD: return "Failed to create thread";
+        case ERROR_FAILED_TO_GET_MODULE_HANDLE: return "Failed to get module handle";
+        case ERROR_FAILED_TO_GET_PROC_ADDRESS: return "Failed to get proc address";
+        case ERROR_BCRYPT_FAILED: return "BCrypt failed";
+        case ERROR_AES_INIT_FAILED: return "AES init failed";
+        case ERROR_AES_INSTALL_FAILED: return "AES install failed";
         default: return "Unknown error";
     }
 }

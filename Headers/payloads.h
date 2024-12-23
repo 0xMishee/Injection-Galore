@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-//All payloads are from metasploit
+//All payloads are generated through metasploit
 
 
 // Calc.exe
