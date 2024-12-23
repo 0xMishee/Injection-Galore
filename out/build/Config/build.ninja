@@ -58,6 +58,15 @@ build CMakeFiles/InjectionGalore.dir/src/main.c.obj: C_COMPILER__InjectionGalore
   TARGET_COMPILE_PDB = CMakeFiles\InjectionGalore.dir\
   TARGET_PDB = InjectionGalore.pdb
 
+build CMakeFiles/InjectionGalore.dir/Injection_Methods/dll_injection.c.obj: C_COMPILER__InjectionGalore_unscanned_Debug E$:/dev/Injection$ Galore/Injection$ Methods/dll_injection.c || cmake_object_order_depends_target_InjectionGalore
+  DEP_FILE = CMakeFiles\InjectionGalore.dir\Injection_Methods\dll_injection.c.obj.d
+  FLAGS = -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd
+  INCLUDES = -I"E:/dev/Injection Galore/Headers"
+  OBJECT_DIR = CMakeFiles\InjectionGalore.dir
+  OBJECT_FILE_DIR = CMakeFiles\InjectionGalore.dir\Injection_Methods
+  TARGET_COMPILE_PDB = CMakeFiles\InjectionGalore.dir\
+  TARGET_PDB = InjectionGalore.pdb
+
 build CMakeFiles/InjectionGalore.dir/enumeration/enumeration.c.obj: C_COMPILER__InjectionGalore_unscanned_Debug E$:/dev/Injection$ Galore/enumeration/enumeration.c || cmake_object_order_depends_target_InjectionGalore
   DEP_FILE = CMakeFiles\InjectionGalore.dir\enumeration\enumeration.c.obj.d
   FLAGS = -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd
@@ -75,7 +84,7 @@ build CMakeFiles/InjectionGalore.dir/enumeration/enumeration.c.obj: C_COMPILER__
 #############################################
 # Link the executable InjectionGalore.exe
 
-build InjectionGalore.exe: C_EXECUTABLE_LINKER__InjectionGalore_Debug CMakeFiles/InjectionGalore.dir/src/main.c.obj CMakeFiles/InjectionGalore.dir/enumeration/enumeration.c.obj
+build InjectionGalore.exe: C_EXECUTABLE_LINKER__InjectionGalore_Debug CMakeFiles/InjectionGalore.dir/src/main.c.obj CMakeFiles/InjectionGalore.dir/Injection_Methods/dll_injection.c.obj CMakeFiles/InjectionGalore.dir/enumeration/enumeration.c.obj
   FLAGS = -O0 -g -Xclang -gcodeview -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd
   LINK_FLAGS = -Xlinker /subsystem:console  -fuse-ld=lld-link
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -loldnames

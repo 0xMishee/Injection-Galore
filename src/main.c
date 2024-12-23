@@ -8,6 +8,10 @@
 #include "../Headers/hashtable.h"
 #include "../Headers/enumeration.h"
 #include "../Headers/error.h"
+#include "../Injection Methods/dll_injection.h"
+
+#define TARGET_PROCESS "Notepad.exe"
+#define TARGET_DLL L"E:\\dev\\Injection Galore\\dll\\injectDll.dll"
 
 /*
 The idea of this program is to be able to choose injection methods to test with various payloads. 
@@ -50,6 +54,12 @@ int main(int argc, char *argv[]) {
 
     if (!enumerateAll(hNTDLLMoudle, hKernel32Module)) {
         handleError(ERROR_INVALID_ENUMERATION, "Failed to enumerate all");
+        goto Cleanup;
+        return 1;
+    }
+
+    if (!runDLLInjection(TARGET_PROCESS, hKernel32Module, TARGET_DLL)) {
+        handleError(ERROR_INVALID_INJECTION, "Failed to run DLL injection");
         goto Cleanup;
         return 1;
     }

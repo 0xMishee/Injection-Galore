@@ -14,8 +14,12 @@
 #define MAX_PATH 260
 #define MAX_PROCESS_COUNT 1024
 
-BOOL enumerateAll(HMODULE hNTDLLModule, HMODULE hKernel32Module) {
+BOOL enumerateAll(IN HMODULE hNTDLLModule, IN HMODULE hKernel32Module) {
     
+    /*
+    These will return the arrays with all the found information.
+    Used to help identity potential issues when triggering injections.
+    */
     osInfo os;
     if (!enumerateOS(hNTDLLModule, &os)) {return FALSE;}
 
@@ -187,7 +191,7 @@ static BOOL enumerateRegistry() {
  * minor version, and build number of the OS.
  * @return TRUE if the operation is successful, FALSE otherwise.
  */
-static BOOL enumerateOS(HMODULE hNTDLLModule, osInfo *os) {
+static BOOL enumerateOS(IN HMODULE hNTDLLModule, IN osInfo *os) {
 
     RtlGetVersionPtr RtlGetVersion = (RtlGetVersionPtr)GetProcAddress(hNTDLLModule, "RtlGetVersion");
     if (!RtlGetVersion) {
