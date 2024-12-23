@@ -74,7 +74,7 @@ static BOOL injectDLL(IN HANDLE hProcess, IN  LPWSTR DllPath, IN HMODULE hKernel
         bState = FALSE; goto Cleanup;
     }
 
-    printf("DLL injected successfully\n");
+    printf("[+] DLL injected successfully\n");
 
 
     hThread = CreateRemoteThread(hProcess, NULL, 0, pLoadLibraryW, pAddress, 0, NULL);
@@ -83,13 +83,12 @@ static BOOL injectDLL(IN HANDLE hProcess, IN  LPWSTR DllPath, IN HMODULE hKernel
         bState = FALSE; goto Cleanup;
     }
 
-    printf("DLL executed successfully\n");
+    printf("[+] DLL executed successfully\n");
 
     Cleanup:
         if (hThread) {
             CloseHandle(hThread);
         }
-
         return bState;
 }
 
