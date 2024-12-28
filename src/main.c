@@ -26,18 +26,78 @@ typedef struct {
     char *enumeration;
 } config, *pConfig;
 
-int main(int argc, char *argv[]) {
-    
-    // Early failure checks
-    if (argc < 2) {
-        informationUsageHelp();
-        return 1;
-    } else {
-        // Validate the flags.
-        for (size_t i = 1; i < argc; i+=2) {
-            //printf("Flag %s, value %s\n", argv[i], argv[i+1]);
+// Initate the configuration, all values are set to set option or remains NULL.
+void parseArguments(int argc, char *argv[], pConfig config) {
+    for (size_t i = 1; i < argc; i+=2) {
+        if (strcmp(argv[i], "--injection") == 0) {
+            config->injectionMethod = argv[i+1];
+        } else if (strcmp(argv[i], "--payload") == 0) {
+            config->payload = argv[i+1];
+        } else if (strcmp(argv[i], "--encryption") == 0) {
+            config->encryption = argv[i+1];
+        } else if (strcmp(argv[i], "--enumeration") == 0) {
+            config->enumeration = argv[i+1];
+        } else {
+            handleError(ERROR_INVALID_FLAG, "Invalid flag");
         }
     }
+}
+
+void printConfig(const config *config) {
+    printf("Injection Method: %s\n", config->injectionMethod);
+    printf("Payload: %s\n", config->payload);
+    printf("Encryption: %s\n", config->encryption);
+    printf("Enumeration: %s\n", config->enumeration);
+}
+
+BOOL runConfig(const config *config) {
+
+    if (strcmp(config->injectionMethod, "CreateRemoteThread") == 0) {
+        printf("CreateRemoteThread\n");
+    } else if (strcmp(config->injectionMethod, "dll") == 0) {
+        printf("Dll Injection\n");
+    } else {
+        handleError(ERROR_INVALID_INJECTION, "Invalid injection method");
+        return FALSE;
+    }
+
+    Cleanup:
+    return TRUE;
+}
+
+
+int main(int argc, char *argv[]) {
+    
+    // Early failure checks && help
+    if (argc < 2) {
+        defaultHelp(&argv[0]);
+        return 1;
+    } else if (strcmp(argv[1], "--help") == 0 && argc == 2) {
+        defaultHelp(&argv[0]);
+        return 0;
+    } else if (strcmp(argv[1], "--help") == 0 && argc > 2) {
+        if (strcmp(argv[2], "injection") == 0) {
+            injectionMethodsHelp();
+        } else if (strcmp(argv[2], "payload") == 0) {
+            payloadsHelp();
+        } else if (strcmp(argv[2], "encrypt") == 0) {
+            encryptionDecryptionMethodsHelp();
+        } else if (strcmp(argv[2], "enum") == 0) {
+            enumerationMethodsHelp();
+        } else {
+            defaultHelp(&argv[0]);
+        }
+        return 0;
+    }
+
+    // Parse the arguments
+    config config;
+    ZeroMemory(&config, sizeof(config));
+    parseArguments(argc, argv, &config);
+
+    // Print the configuration. For debugging purposes.
+    printConfig(&config);
+
 
     HMODULE hNTDLLMoudle = GetModuleHandleW(L"ntdll.dll");
     if (!hNTDLLMoudle) {
@@ -63,6 +123,10 @@ int main(int argc, char *argv[]) {
         goto Cleanup;
         return 1;
     }
+
+
+
+
     
     Cleanup:
         if (hNTDLLMoudle) {FreeLibrary(hNTDLLMoudle);}

@@ -3,32 +3,43 @@
 #include <stdio.h>
 
 
-void informationUsageHelp() {
-    printf("Usage: <injection> <payload> <encryption> <>\n");
+void informationUsageHelp(IN char* argv[]){ 
+    printf("Usage: %s --injection <method> --payload <value> --encryption <type> --enumeration <option>\n", argv[0]);
     printf("Example: <dll> <calc>\n");
 }
 
 void injectionMethodsHelp(){
+    printf("-------------------\n");
     printf("1. CreateRemoteThread\n");
     printf("2. <dll> Dll Injection\n");
 }
 
 void payloadsHelp(){
-    printf("1. Reverse Shell\n");
-    printf("2. Message Box\n");
+    printf("-------------------\n");
+    printf("1. <rs> Reverse Shell\n");
+    printf("2. <mb> Message Box\n");
     printf("3. <calc> Calculator\n");
 }
 
 void encryptionDecryptionMethodsHelp(){
+    printf("-------------------\n");
     printf("1. XOR\n");
     printf("2. AES\n");
     printf("3. RSA\n");
 }
 
 void enumerationMethodsHelp(){
+    printf("-------------------\n");
     printf("1. SnapShot\n");
 
 }
 
+void defaultHelp(char* argv[]){
+    informationUsageHelp(&argv[0]);
+    injectionMethodsHelp();
+    payloadsHelp();
+    encryptionDecryptionMethodsHelp();
+    enumerationMethodsHelp();
+}
 
 #endif // INFO_H

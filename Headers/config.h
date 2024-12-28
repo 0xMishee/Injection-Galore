@@ -2,8 +2,26 @@
 #define CONFIG_H
 
 const char *injectionMethodsValue[] = {
-    "CreateRemoteThread",
-    "Dll Injection"
+    "rdll", 
+    "ldll",
+    "rsc", 
+    "lsc",
+    "apc",
+    "ebapc",
+    "lm",
+    "rm",
+    "lfs",
+    "rfs",
+    "lpe",
+    "redll",
+    "tl",
+    "gp",
+    "gh",
+    "hrp",
+    "hrph",
+    "ph",
+    "kcp",
+    "ca",
 };
 
 const char *payloadsValue[] = {
