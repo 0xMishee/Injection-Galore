@@ -56,7 +56,7 @@ InjectionGalore.exe -p calc -t rdll
 
 Found a bug? Create an issue for it ❤️
 ```
-InjectionGalore.exe -h
+InjectionGalore.exe --help <options/Default: if left out> 
 ```
 
 ## Authors
