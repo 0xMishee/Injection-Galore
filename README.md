@@ -4,23 +4,23 @@ Project to test payloads with different injection techniques.
 
 ## Description
 
-Project is meant to help testing injection techniques in combination with some encryption & decryption, enumeration of host to spot potential issues and some payload. There's some benign payloads already that could be used otherwise just add another in "payloads.h". 
+Project is meant to help testing injection techniques in combination with some encryption & decryption, enumeration of host to spot potential issues with some payload. There's some benign payloads already that could be used otherwise just add another in "payloads.h". 
 
 ## Getting Started
 
-Compile it with cmake with Ninja. 
+Compile it with cmake with a Ninja generator.
 
 ### Executing program
 
-* How to run the program
-* Step-by-step bullets
+* InjectionGalore.exe <flags> <value>
 ```
-code blocks for commands
+Example:
+InjectionGalore.exe -p calc 
 ```
 
 ## Help
 
-Any advise for common problems or issues.
+Found a bug? Create an issue for it ❤️
 ```
 InjectionGalore.exe -h
 ```
@@ -31,9 +31,6 @@ Me, myself and I
 
 ## Version History
 
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
 * 0.1
     * Initial Release
 
