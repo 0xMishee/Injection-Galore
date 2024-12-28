@@ -50,5 +50,5 @@ Makefile
 *.tmp
 
 # Ignore all files in the build directory
-.out/
-out/
+.out/build/*
+out/build/
