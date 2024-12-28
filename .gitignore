@@ -14,6 +14,7 @@
 # Compiled Static libraries
 *.a
 *.lib
+*.exp
 
 # Executables
 *.exe
@@ -49,4 +50,5 @@ Makefile
 *.tmp
 
 # Ignore all files in the build directory
-build/
+.out/
+out/
