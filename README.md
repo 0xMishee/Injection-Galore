@@ -49,7 +49,7 @@ cmake --build .\out\build\Config
 * InjectionGalore.exe <flags> <value>
 ```
 Example:
-InjectionGalore.exe -p calc -t rdll
+InjectionGalore.exe --injection rdll -payload calc ...
 ```
 
 ## Help
