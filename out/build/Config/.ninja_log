@@ -1,8 +1,0 @@
-# ninja log v6
-8	508	7566873720277377	CMakeFiles/InjectionGalore.dir/src/main.c.obj	8f035f8b78d056ff
-7	781	7566875297407325	InjectionGalore.exe	b11d04e020f2e7a5
-8	601	7566711378674670	CMakeFiles/InjectionGalore.dir/enumeration/enumeration.c.obj	a48b046b16e7ec9a
-16	485	7566872684402335	CMakeFiles/InjectionGalore.dir/Injection_Methods/dll_injection.c.obj	f34d1a77549eff63
-27	173	7570832451202785	CMakeFiles/InjectionGalore.dir/Injection_Methods/remote_shellcode.c.obj	7f9c99207c713cd8
-11	565	7570832451041526	CMakeFiles/InjectionGalore.dir/Injection_Methods/dll_injection.c.obj	f34d1a77549eff63
-566	772	7570832456587772	InjectionGalore.exe	8d29e7c6822e9088
