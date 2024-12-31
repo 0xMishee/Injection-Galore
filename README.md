@@ -7,8 +7,8 @@ Project to test payloads with different injection techniques.
 Project is meant to help testing injection techniques in combination with some encryption & decryption, enumeration of host to spot potential issues with some payload. There's some benign payloads already that could be used otherwise just add another in "payloads.h". 
 
 ### Injection Techniques (Planned)
-* DLL Injection (Remote/Local)
-* Shellcode Injection (Remote)
+* DLL Injection (Remote)                        : Done.
+* Shellcode Injection (Remote)                  : Done.
 * APC Injection
 * Mapping Injection
 * Function Stomping

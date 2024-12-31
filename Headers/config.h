@@ -16,6 +16,8 @@ typedef struct {
     const size_t payloadSize;
 } configMap, *pConfigMap;
 
+// Injection methods
+// Not currently used.
 const char *injectionMethodsValue[] = {
     "rdll",     // Remote DLL
     "ldll",     // Local DLL
