@@ -33,6 +33,7 @@ typedef enum {
     ERROR_BCRYPT_FAILED,
     ERROR_AES_INIT_FAILED, 
     ERROR_AES_INSTALL_FAILED,
+    ERROR_FAILED_TO_WRITE_MEMORY,
 } errorCode;
 
 static const char* getErrorMessage(errorCode code){
@@ -66,6 +67,7 @@ static const char* getErrorMessage(errorCode code){
         case ERROR_BCRYPT_FAILED: return "BCrypt failed";
         case ERROR_AES_INIT_FAILED: return "AES init failed";
         case ERROR_AES_INSTALL_FAILED: return "AES install failed";
+        case ERROR_FAILED_TO_WRITE_MEMORY: return "Failed to write memory";
         default: return "Unknown error";
     }
 }

@@ -7,9 +7,15 @@ file(GLOB INJECTION_METHODS_SOURCES "Injection Methods/*.c")
 add_executable(InjectionGalore
                 src/main.c
                 ${INJECTION_METHODS_SOURCES}
-                enumeration/enumeration.c)
+                enumeration/enumeration.c
+                Payloads/payloads.c)
 
 target_include_directories(InjectionGalore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Headers)
+target_include_directories(InjectionGalore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Injection Methods")
+target_include_directories(InjectionGalore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Payloads)
+target_include_directories(InjectionGalore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/enumeration)
+
+
 
 include(CTest)
 enable_testing()

@@ -14,10 +14,10 @@ typedef struct {
     DWORD buildNumber;
 } osInfo, *pOSInfo;
 
-BOOL enumerateAll(HMODULE hNTDLLModule, HMODULE hKernel32Module);
-static BOOL enumerateProcesses();
-static BOOL enumerateServices();
-static BOOL enumerateRegistry();
-static BOOL enumerateOS(HMODULE hNTDLLModule, osInfo *os);
+BOOL enumerateAll(HMODULE hNTDLLModule);
+BOOL enumerateProcesses(void);
+BOOL enumerateServices(void);
+BOOL enumerateRegistry(void);
+BOOL enumerateOS(HMODULE hNTDLLModule, osInfo *os);
 
 #endif // ENUMERATION_H

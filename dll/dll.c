@@ -2,7 +2,7 @@
 #include <windows.h>
 
 void ShowMessageBox() {
-    MessageBoxA(NULL, "This is a message box", "Message Box", MB_OK | MB_ICONINFORMATION);
+    MessageBoxA(NULL, "DLL Message", "Message Box", MB_OK | MB_ICONINFORMATION);
 }
 
 BOOL APIENTRY DllMain (HMODULE hModule, DWORD dwReason, LPVOID lpReserved){

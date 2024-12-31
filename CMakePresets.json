@@ -11,8 +11,8 @@
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_TOOLCHAIN_FILE": "",
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
-                "CMAKE_MAKE_PROGRAM": "E:\\ninja-win\\ninja.exe"
-            }
+                "CMAKE_MAKE_PROGRAM": "E:\\ninja-win\\ninja.exe",
+                "CMAKE_C_FLAGS": "-D_FORTIFY_SOURCE=2 -Wall -Wextra -Werror -Wpedantic -Wdeprecated-declarations"            }
         }
     ]
 }

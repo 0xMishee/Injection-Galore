@@ -38,6 +38,8 @@ Project is meant to help testing injection techniques in combination with some e
 
 Compile it with cmake with a Ninja generator.
 
+Change directory for your ninja.exe file in "CMakePresets.json".
+
 ```
 cd "Injection Galore"
 cmake --preset=Config

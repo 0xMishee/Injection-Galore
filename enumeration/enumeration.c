@@ -14,25 +14,6 @@
 #define MAX_PATH 260
 #define MAX_PROCESS_COUNT 1024
 
-BOOL enumerateAll(IN HMODULE hNTDLLModule, IN HMODULE hKernel32Module) {
-    
-    /*
-    These will return the arrays with all the found information.
-    Used to help identity potential issues when triggering injections.
-    */
-    osInfo os;
-    if (!enumerateOS(hNTDLLModule, &os)) {return FALSE;}
-
-    if (!enumerateProcesses()) {return FALSE;}
-
-    if (!enumerateServices()) {return FALSE;}
-
-    if (!enumerateRegistry()) {return FALSE;}
-
-    printf("Done enumerating all\n");
-    return TRUE;
-}
-
 /**
  * @brief Enumerates processes and checks against a list of anti-analysis processes.
  *
@@ -45,7 +26,7 @@ BOOL enumerateAll(IN HMODULE hNTDLLModule, IN HMODULE hKernel32Module) {
  * @note The function allocates memory for storing process information, which is freed before the function returns.
  *       Ensure that MAX_PROCESS_COUNT is defined and that antiAnalysisProcesses is an array of process names to check against.
  */
-BOOL enumerateProcesses() {
+BOOL enumerateProcesses(void) {
 
     HANDLE hProcessSnap;
     PROCESSENTRY32 pe32;
@@ -100,15 +81,21 @@ BOOL enumerateProcesses() {
  * 
  * @return TRUE if the services were successfully enumerated, FALSE otherwise.
  */
-static BOOL enumerateServices() {
+BOOL enumerateServices(void) {
+
+    DWORD dwBytesNeeded = 0;
+    DWORD dwServicesReturned = 0;
+    DWORD dwResumeHandle = 0;
+
+    LPENUM_SERVICE_STATUS_PROCESSA services = NULL;
 
     SC_HANDLE hSCManager = OpenSCManager(NULL, NULL, SC_MANAGER_ENUMERATE_SERVICE);
     if (!hSCManager) {
         handleError(ERROR_INVALID_SERVICE, "Failed to open service control manager");
         goto Cleanup;
+    } else {
+        // Do nothing
     }
-
-    DWORD dwBytesNeeded, dwServicesReturned, dwResumeHandle = 0;
 
     EnumServicesStatusEx(
                         hSCManager,
@@ -122,7 +109,7 @@ static BOOL enumerateServices() {
                         &dwResumeHandle,
                         NULL); 
     
-    LPENUM_SERVICE_STATUS_PROCESS services = (LPENUM_SERVICE_STATUS_PROCESSA)malloc(dwBytesNeeded);
+    services = (LPENUM_SERVICE_STATUS_PROCESSA)malloc(dwBytesNeeded);
     if (!services) {
         handleError(ERROR_FAILED_TO_ALLOCATE_MEMORY, "Failed to allocate memory for services");
         goto Cleanup;
@@ -143,6 +130,8 @@ static BOOL enumerateServices() {
                         NULL)) {
         handleError(ERROR_INVALID_SERVICE, "Failed to enumerate services");
         goto Cleanup;
+    } else {
+        printf("Services found: %lu\n", dwServicesReturned);
     }
 
     /*    
@@ -155,18 +144,23 @@ static BOOL enumerateServices() {
         if (hSCManager) {
             CloseServiceHandle(hSCManager);
         }
-        free(services);
+        if (services) {
+            free(services);
+        }
     return dwServicesReturned > 0 ? TRUE : FALSE;
 }
 
-static BOOL enumerateRegistry() {
+BOOL enumerateRegistry(void) {
 
     DWORD dwKeysFound = 0;
+    registryInfo *registryKeys = NULL;
 
-    registryInfo *registryKeys = (registryInfo*)malloc(sizeof(registryInfo));
+    registryKeys = (registryInfo*)malloc(sizeof(registryInfo));
     if (!registryKeys) {
         handleError(ERROR_FAILED_TO_ALLOCATE_MEMORY, "Failed to allocate memory for registry keys");
         goto Cleanup;
+    } else {
+        ZeroMemory(registryKeys, sizeof(registryInfo));
     }
 
     for (size_t i = 0; i < sizeof(antiAnalysisRegistryKeys) / sizeof(antiAnalysisRegistryKeys[0]); i++) {
@@ -176,7 +170,8 @@ static BOOL enumerateRegistry() {
             RegCloseKey(hKey);
             dwKeysFound++;
         }
-    }
+    } 
+
     Cleanup:
         free(registryKeys);
 
@@ -191,9 +186,9 @@ static BOOL enumerateRegistry() {
  * minor version, and build number of the OS.
  * @return TRUE if the operation is successful, FALSE otherwise.
  */
-static BOOL enumerateOS(IN HMODULE hNTDLLModule, IN osInfo *os) {
+BOOL enumerateOS(IN HMODULE hNTDLLModule, IN osInfo *os) {
 
-    RtlGetVersionPtr RtlGetVersion = (RtlGetVersionPtr)GetProcAddress(hNTDLLModule, "RtlGetVersion");
+    RtlGetVersionPtr RtlGetVersion = (RtlGetVersionPtr)(void *)GetProcAddress(hNTDLLModule, "RtlGetVersion");
     if (!RtlGetVersion) {
         handleError(ERROR_FAILED_TO_GET_PROCESS_ADDRESS, "Failed to get function address RtlGetVersion");
         return FALSE;
@@ -211,3 +206,21 @@ static BOOL enumerateOS(IN HMODULE hNTDLLModule, IN osInfo *os) {
     return TRUE;
 }
 
+BOOL enumerateAll(IN HMODULE hNTDLLModule) {
+    
+    /*
+    These will return the arrays with all the found information.
+    Used to help identity potential issues when triggering injections.
+    */
+    osInfo os;
+    if (!enumerateOS(hNTDLLModule, &os)) {return FALSE;}
+
+    if (!enumerateProcesses()) {return FALSE;}
+
+    if (!enumerateServices()) {return FALSE;}
+
+    if (!enumerateRegistry()) {return FALSE;}
+
+    printf("Done enumerating all\n");
+    return TRUE;
+}

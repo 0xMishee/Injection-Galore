@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <Windows.h>
 #include <tlhelp32.h>
-#include "error.h"
 
-static BOOL findTargetProcess(IN char* szProcessName, OUT DWORD* dwProcessId, OUT HANDLE* hProcess) {
+#include "error.h"
+#include "dll_injection.h"
+
+BOOL findTargetProcessRemoteDLL(IN char* szProcessName, OUT DWORD* dwProcessId, OUT HANDLE* hProcess) {
 
     PROCESSENTRY32 pe32;
     HANDLE hProcessSnap;
@@ -51,7 +53,7 @@ static BOOL findTargetProcess(IN char* szProcessName, OUT DWORD* dwProcessId, OU
         return bState;
 }
 
-static BOOL injectDLL(IN HANDLE hProcess, IN  LPWSTR DllPath, IN HMODULE hKernel32Module){
+BOOL injectDLL(IN HANDLE hProcess, IN  LPWSTR DllPath, IN HMODULE hKernel32Module){
 
     BOOL bState = TRUE;
     HANDLE hThread = NULL;
@@ -59,8 +61,7 @@ static BOOL injectDLL(IN HANDLE hProcess, IN  LPWSTR DllPath, IN HMODULE hKernel
     SIZE_T dwBytesWritten = 0;
     DWORD  dwSizeToWrite = lstrlenW(DllPath) * sizeof(WCHAR);
 
-
-    LPVOID pLoadLibraryW = GetProcAddress(hKernel32Module, "LoadLibraryW");
+    LPTHREAD_START_ROUTINE pLoadLibraryW = (LPTHREAD_START_ROUTINE)(void *)GetProcAddress(hKernel32Module, "LoadLibraryW");
 
     pAddress = VirtualAllocEx(hProcess, NULL, dwSizeToWrite, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
     if (!pAddress) {
@@ -97,7 +98,7 @@ BOOL runDLLInjection(IN char* szProcessName, IN HMODULE hKernel32Module, IN LPWS
     DWORD dwProcessId = 0;
     HANDLE hProcess = NULL;
 
-    if (!findTargetProcess(szProcessName, &dwProcessId, &hProcess)) {
+    if (!findTargetProcessRemoteDLL(szProcessName, &dwProcessId, &hProcess)) {
         handleError(ERROR_INVALID_PROCESS, "Failed to find target process");
         return FALSE;
     }
