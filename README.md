@@ -13,7 +13,7 @@ Project is meant to help testing injection techniques in combination with some e
 * Mapping Injection
 * Function Stomping
 * PE Injections
-* Reflective DLL
+* Reflective DLL                                : In progress.
 * Threadless Injection
 * Ghost Process Injection
 * Herpaderping
@@ -21,6 +21,8 @@ Project is meant to help testing injection techniques in combination with some e
 * Shellcode Reflective DLL
 * Patchless Threadless Via Hardware Breakpoints
 * Process Hypnosis
+* Atom Bombing
+* Cross Architecture
 
 ### Encryption (Planned)
 * AES
@@ -51,7 +53,7 @@ cmake --build .\out\build\Config
 * InjectionGalore.exe <flags> <value>
 ```
 Example:
-InjectionGalore.exe --injection rdll -payload calc ...
+InjectionGalore.exe --injection rsc -payload calc
 ```
 
 ## Help

@@ -14,26 +14,22 @@ void injectionMethodsHelp(void){
     printf("1. CreateRemoteThread\n");
     printf("2. <dll> Dll Injection\n");
     printf("3. rdll - Remote DLL\n");
-    printf("4. ldll - Local DLL\n");
-    printf("5. rsc - Remote Shellcode\n");
-    printf("6. lsc - Local Shellcode\n");
-    printf("7. apc - Asynchronous Procedure Call\n");
-    printf("8. ebapc - Early Bird Asynchronous Procedure Call\n");
-    printf("9. lm - Local Mapping\n");
-    printf("10. rm - Remote Mapping\n");
-    printf("11. lfs - Local Function Stomping\n");
-    printf("12. rfs - Remote Function Stomping\n");
-    printf("13. lpe - Local PE\n");
-    printf("14. redll - Reflective DLL\n");
-    printf("15. tl - Threadless\n");
-    printf("16. gp - Ghost Process\n");
-    printf("17. gh - Ghost Hollowing\n");
-    printf("18. hrp - Herpaderping\n");
-    printf("19. hrph - Herpaderping Hollowing\n");
-    printf("20. ph - Process Hypnosis\n");
-    printf("21. kcp - Known Cache Poisoning\n");
-    printf("22. ca - Cross Architecture\n");
-    printf("23. ab - Atom Bombing\n");
+    printf("4. rsc - Remote Shellcode\n");
+    printf("5. apc - Asynchronous Procedure Call\n");
+    printf("6. ebapc - Early Bird Asynchronous Procedure Call\n");
+    printf("7. rm - Remote Mapping\n");
+    printf("9. rfs - Remote Function Stomping\n");
+    printf("10. lpe - Local PE\n");
+    printf("11. redll - Reflective DLL\n");
+    printf("12. tl - Threadless\n");
+    printf("13. gp - Ghost Process\n");
+    printf("14. gh - Ghost Hollowing\n");
+    printf("15. hrp - Herpaderping\n");
+    printf("16. hrph - Herpaderping Hollowing\n");
+    printf("17. ph - Process Hypnosis\n");
+    printf("18. kcp - Known Cache Poisoning\n");
+    printf("19. ca - Cross Architecture\n");
+    printf("20. ab - Atom Bombing\n");
 }
 
 void payloadsHelp(void){

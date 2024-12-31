@@ -26,7 +26,6 @@ The payloads will be encrypted using different encryption methods.
 The program will also enumerate the system to gather information about the OS, processes, services, and registry keys.
 */
 
-
 int main(int argc, char *argv[]) {
 
     // Early failure checks && help
