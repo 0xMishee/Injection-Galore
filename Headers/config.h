@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include "error.h"
-#include "../Payloads/payloads.h" 
+#include "payloads.h"
 
 typedef struct {
     char *injectionMethod;
@@ -11,7 +11,7 @@ typedef struct {
 } config, *pConfig;
 
 typedef struct {
-    const char *paylaodName;
+    const char *payloadName;
     const unsigned char *payload;
     const size_t payloadSize;
 } configMap, *pConfigMap;
@@ -64,7 +64,7 @@ void printConfig(const config *config) {
 
 configMap* getPayload(const char *payloadName) {
     for (size_t i = 0; i < sizeof(payloads) / sizeof(payloads[0]); i++) {
-        if (strcmp(payloads[i].paylaodName, payloadName) == 0) {
+        if (strcmp(payloads[i].payloadName, payloadName) == 0) {
             return &payloads[i];
         }
     }
