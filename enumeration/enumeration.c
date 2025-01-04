@@ -4,7 +4,6 @@
 #include <string.h>
 #include <winsvc.h>
 
-#include "os.h"
 #include "process.h"
 #include "registry.h"
 #include "services.h"

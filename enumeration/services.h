@@ -14,8 +14,6 @@ static const char* antiAnalysisServices[] = {
     "vmtoolsd",
     "vmrawdsk",
     "vmusrvc",
-    "Discord", // Testing
-    "WeChat" // Testing
 };
 
 

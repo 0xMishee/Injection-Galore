@@ -25,6 +25,7 @@ target_include_directories(InjectionGalore PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/I
 target_include_directories(InjectionGalore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Payloads)
 target_include_directories(InjectionGalore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/enumeration)
 target_include_directories(InjectionGalore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Syscall)
+target_include_directories(InjectionGalore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Structs)
 
 
 include(CTest)

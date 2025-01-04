@@ -36,12 +36,10 @@ Use this website when needed to update the SSN [Windows X86-64 System Call Table
 * RSA
 * XOR
 
-### Enumeration (Planned)
-* OS
+### Enumeration
 * Processes
 * Registry
 * Services
-* Hostnames
 
 ## Getting Started
 

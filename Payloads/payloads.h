@@ -11,9 +11,11 @@ I don't like this solution, but it works for now.
 
 // Payloads
 extern const unsigned char payloadCalc[];
+extern const unsigned char payloadBindShell[];
 
 // Payload sizes
 #define PAYLOAD_CALC_SIZE 354
+#define PAYLOAD_BIND_SHELL_SIZE 341
 
 
 

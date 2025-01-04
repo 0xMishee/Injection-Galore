@@ -4,10 +4,13 @@
 #include <stdio.h>
 #include <Windows.h>
 
+#include "structs.h"
+
 #define NT_SUCCESS(Status) (((NTSTATUS)(Status)) >= 0)
 
 // Current implamentation is based on Hell's Gate technique.
 // https://github.com/am0nsec/HellsGate/blob/master/HellsGate/main.c#L8
+
 enum DirectSyscallSwitch {
     On, 
     Off
@@ -34,13 +37,10 @@ enum DirectSyscallLibrary {
     SysNtWaitForSingleObject
 };
 
-extern VOID DirectSysCallUpdate(WORD wSyscall);
-extern DirectSysCall();
-
-BOOL initiateDirectSyscallTable(void);
+PTEB RtlGetThreadEnvironmentBlock(VOID);
 BOOL GetPebImageExportDirectory(IN PVOID pModuleBase, OUT PIMAGE_EXPORT_DIRECTORY* ppImageExportDirectory);
 BOOL GetNtTableEntry(IN PVOID pModuleBase, IN PIMAGE_EXPORT_DIRECTORY pImageExportDirectory, IN pNtTableEntry pVxTableEntry);
-BOOL initiateDirectSyscallTable(void);
+BOOL initiateDirectSyscallTable(IN NtTable NtTable);
 BOOL runDirectSyscall(IN pNtTable pNtTable, IN enum DirectSyscallLibrary DirectSyscallLibrary, ...);
 DWORD64 fnv1(PBYTE data);
 

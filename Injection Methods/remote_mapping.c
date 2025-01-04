@@ -8,7 +8,6 @@
 #include "remote_mapping.h"
 
 
-
 BOOL findTargetProcessRemoteMapping(IN char* szProcessName, OUT DWORD* dwProcessId, OUT HANDLE* hProcess) {
     PROCESSENTRY32 pe32;
     HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);

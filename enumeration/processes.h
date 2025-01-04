@@ -49,8 +49,6 @@ static const char* antiAnalysisProcesses[] = {
     "vmtoolsd.exe",
     "vmrawdsk.exe",
     "vmusrvc.exe",
-    "Discord.exe", // Testing
-    "WeChat.exe" // Testing
 };
 
 #endif // PROCESS_H

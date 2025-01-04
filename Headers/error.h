@@ -34,6 +34,7 @@ typedef enum {
     ERROR_AES_INIT_FAILED, 
     ERROR_AES_INSTALL_FAILED,
     ERROR_FAILED_TO_WRITE_MEMORY,
+    ERROR_INVALID_SYSCALL,
 } errorCode;
 
 static const char* getErrorMessage(errorCode code){
@@ -68,6 +69,7 @@ static const char* getErrorMessage(errorCode code){
         case ERROR_AES_INIT_FAILED: return "AES init failed";
         case ERROR_AES_INSTALL_FAILED: return "AES install failed";
         case ERROR_FAILED_TO_WRITE_MEMORY: return "Failed to write memory";
+        case ERROR_INVALID_SYSCALL: return "Invalid syscall";
         default: return "Unknown error";
     }
 }
