@@ -24,6 +24,13 @@ Project is meant to help testing injection techniques in combination with some e
 * Atom Bombing
 * Cross Architecture
 
+### Syscall Support
+*Direct
+*Indirect
+*Unhooking
+
+Use this website when needed to update the SSN [Windows X86-64 System Call Table (XP/2003/Vista/7/8/10/2022/11)](https://j00ru.vexillium.org/syscalls/nt/64/)
+
 ### Encryption (Planned)
 * AES
 * RSA

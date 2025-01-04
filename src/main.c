@@ -9,11 +9,12 @@
 #include "../Headers/error.h"
 
 // Payloads
-#include "../Payloads/payloads.h"
+#include "payloads.h"
 
 // Injection methods
-#include "../Injection Methods/dll_injection.h"
-#include "../Injection Methods/remote_shellcode.h"
+#include "dll_injection.h"
+#include "remote_shellcode.h"
+#include "remote_mapping.h"
 
 // For now, the target process will be notepad.exe
 // This will be changed in the future to be user defined.
