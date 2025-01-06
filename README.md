@@ -26,7 +26,7 @@ Project is meant to help testing injection techniques in combination with some e
 
 ### Syscall Support
 
-* Direct
+* Direct                                       : In progress
 * Indirect
 * Unhooking
 
