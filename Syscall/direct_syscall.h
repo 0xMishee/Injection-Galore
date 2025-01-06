@@ -40,8 +40,8 @@ enum DirectSyscallLibrary {
 PTEB RtlGetThreadEnvironmentBlock(VOID);
 BOOL GetPebImageExportDirectory(IN PVOID pModuleBase, OUT PIMAGE_EXPORT_DIRECTORY* ppImageExportDirectory);
 BOOL GetNtTableEntry(IN PVOID pModuleBase, IN PIMAGE_EXPORT_DIRECTORY pImageExportDirectory, IN pNtTableEntry pVxTableEntry);
-BOOL initiateDirectSyscallTable(IN NtTable NtTable);
-BOOL runDirectSyscall(IN pNtTable pNtTable, IN enum DirectSyscallLibrary DirectSyscallLibrary, ...);
+BOOL initiateDirectSyscallTable(IN NtTable *NtTable);
+BOOL runDirectSyscall(IN pNtTable *pNtTable, IN enum DirectSyscallLibrary DirectSyscallLibrary, ...);
 DWORD64 fnv1(PBYTE data);
 
 

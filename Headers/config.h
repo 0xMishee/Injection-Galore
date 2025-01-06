@@ -55,7 +55,7 @@ void parseArguments(int argc, char *argv[], pConfig config) {
             config->injectionMethod = argv[i+1];
         } else if (strcmp(argv[i], "--payload") == 0) {
             config->payload = argv[i+1];
-        } else if (strcmp(argv[i], "--DirectSysCall") == 0) {
+        } else if (strcmp(argv[i], "--directsyscall") == 0) {
             char *endptr;
             config->directSyscallSwitch = strtol(argv[i+1], &endptr, 10);
             if (*endptr != '\0') {

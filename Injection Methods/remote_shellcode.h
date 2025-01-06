@@ -4,6 +4,6 @@
 #include <Windows.h>
 
 BOOL findTargetProcessRemoteShellCode(IN char* szProcessName, OUT DWORD* dwProcessId, OUT HANDLE* hProcess);
-BOOL runShellcodeInjection(IN char* TARGET_PROCESS, IN PBYTE pShellcodeBuffer, IN DWORD dwShellcodeBufferSize);
+BOOL runShellcodeInjection(IN char* TARGET_PROCESS, IN PBYTE pShellcodeBuffer, IN DWORD dwShellcodeBufferSize, IN enum DirectSyscallSwitch DirectSyscallSwitch, IN pNtTable pNtTable);
 
 #endif // REMOTE_SHELLCODE_H

