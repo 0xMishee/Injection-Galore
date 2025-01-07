@@ -22,7 +22,7 @@ typedef struct _NtTableEntry {
     WORD wSyscall;
 } NtTableEntry, *pNtTableEntry;
 
-typedef struct _vxTable {
+typedef struct _NtTable {
     NtTableEntry NtAllocateVirtualMemory;
     NtTableEntry NtProtectVitualMemory;
     NtTableEntry NtWriteVirtualMemory;
