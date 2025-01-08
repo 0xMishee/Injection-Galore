@@ -16,13 +16,13 @@ enum DirectSyscallSwitch {
     Off
 };
 
-typedef struct _NtTableEntry {
+typedef struct NtTableEntry {
     PVOID pAddress; 
     DWORD64 dwHash;
     WORD wSyscall;
 } NtTableEntry, *pNtTableEntry;
 
-typedef struct _NtTable {
+typedef struct NtTable {
     NtTableEntry NtAllocateVirtualMemory;
     NtTableEntry NtProtectVitualMemory;
     NtTableEntry NtWriteVirtualMemory;

